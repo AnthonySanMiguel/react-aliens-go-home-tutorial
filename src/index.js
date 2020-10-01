@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import Game from './containers/Game';
+import reducer from './reducers';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+/* eslint-disable no-underscore-dangle */
+const store = createStore(
+    reducer, /* preloadedState, */
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+/* eslint-enable */
+ReactDOM.render(
+    <Provider store={store}>
+        <Game />
+    </Provider>,
+    document.getElementById('root'),
+);
