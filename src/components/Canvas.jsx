@@ -1,5 +1,6 @@
 import React from 'react';
 import Sky from './Sky';
+import Ground from './Ground';
 
 const Canvas = () => {
     // Defines viewBox attribute of Canvas svg element.
@@ -13,7 +14,10 @@ const Canvas = () => {
             preserveAspectRatio="xMaxYMax none" // Forces uniform scaling of the canvas and its elements.
             viewBox={viewBox}
         >
+            {/* SVG relies on the order that the elements are listed to decide which one is above the other.
+            You have to define the circle element after the Sky so web browsers know that they must show it above the blue background. */}
             <Sky />
+            <Ground />
             <circle cx={0} cy={0} r={50}/>
         </svg>
     );
