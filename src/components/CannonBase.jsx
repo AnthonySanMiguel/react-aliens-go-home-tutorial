@@ -1,5 +1,5 @@
 import React from 'react';
-import {pathFromBezierCurve} from "../utils/utils/formulas";
+import {pathFromBezierCurve} from "../utils/formulas";
 
 const CannonBase = (props) => {
     const cannonBaseStyle = {
