@@ -8,13 +8,19 @@ import CannonBall from "./CannonBall";
 import CurrentScore from "./CurrenScore";
 import FlyingObject from "./FlyingObject";
 import Heart from "./Heart";
+import StartGame from "./StartGame";
+import Title from "./Title";
 
 const Canvas = (props) => {
+    // Use the 1200 value so your app can properly show the new title component.
+    // This new vertical space will give enough time for your users to see and kill these flying objects.
+    const gameHeight = 1200;
     // Defines viewBox attribute of Canvas svg element.
-    const viewBox = [window.innerWidth / -2, // min-x: This value defines what is the leftmost point that your users will see. So, to make the origin axis (and the circle) appear in the center of the screen, you divided your screen width by negative two (window.innerWidth / -2) to the get this attribute (min-x). Note that you need to use -2 to make your canvas show the same amount of points to the left (negative) and to the right (positive) of the origin.
-        100 - window.innerHeight, // min-y: This value defines what will be the uppermost point of your canvas. Here, you have subtracted the window.innerHeight from 100 to give some area (100 points) after the Y origin.
-        window.innerWidth, // width
-        window.innerHeight]; // height
+    const viewBox =
+            [window.innerWidth / -2, // min-x: This value defines what is the leftmost point that your users will see. You need to use -2 to make your canvas show the same amount of points to the left (negative) and to the right (positive) of the origin.
+            100 - gameHeight, // min-y: This value defines what will be the uppermost point of your canvas.
+            window.innerWidth, // width
+            gameHeight]; // height
     return (
         <svg
             id="aliens-go-home-canvas"
@@ -42,6 +48,8 @@ const Canvas = (props) => {
             <FlyingObject position={{x: 150, y: -300}}/>
             {/* Hard-coding a single heart for now */}
             <Heart position={{x: -300, y: 35}} />
+            <StartGame onClick={() => console.log('Aliens, Go Home!')} />
+            <Title />
         </svg>
     );
 };

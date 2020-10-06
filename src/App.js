@@ -32,6 +32,15 @@ class App extends Component {
     }
 }
 
+// This will make your app keep the dimension of your canvas equal to the dimension of the window that your users see...even if they resize their browsers.
+// It will also force the execution of the window.onresize function when the app is rendered for the first time.
+window.onresize = () => {
+    const cnv = document.getElementById('aliens-go-home-canvas');
+    cnv.style.width = `${window.innerWidth}px`;
+    cnv.style.height = `${window.innerHeight}px`;
+};
+window.onresize();
+
 App.propTypes = {
     // Refers to the angle the cannon is aiming to.
     angle: PropTypes.number.isRequired,
