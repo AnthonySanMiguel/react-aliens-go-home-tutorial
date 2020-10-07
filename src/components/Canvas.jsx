@@ -4,10 +4,8 @@ import Sky from './Sky';
 import Ground from './Ground';
 import CannonBase from "./CannonBase";
 import CannonPipe from "./CannonPipe";
-import CannonBall from "./CannonBall";
 import CurrentScore from "./CurrenScore";
 import FlyingObject from "./FlyingObject";
-import Heart from "./Heart";
 import StartGame from "./StartGame";
 import Title from "./Title";
 
@@ -41,24 +39,34 @@ const Canvas = (props) => {
             {/* Cannon rotation is tied to the state provided by the Redux store (through your App mappings) */}
             <CannonPipe rotation={props.angle} />
             <CannonBase />
-            <CannonBall position={{x: 0, y: -100}}/>
-            {/* Hard-coding the score for now */}
             <CurrentScore score={15} />
-            <FlyingObject position={{x: -150, y: -300}}/>
-            <FlyingObject position={{x: 150, y: -300}}/>
-            {/* Hard-coding a single heart for now */}
-            <Heart position={{x: -300, y: 35}} />
-            <StartGame onClick={() => console.log('Aliens, Go Home!')} />
-            <Title />
+
+            { ! props.gameState.started &&
+            <g>
+                <StartGame onClick={() => props.startGame()} />
+                <Title />
+            </g>
+            }
+
+            {props.gameState.flyingObjects.map(flyingObject => (
+                <FlyingObject
+                    key={flyingObject.id}
+                    position={flyingObject.position}
+                />
+            ))}
         </svg>
     );
 };
 
 Canvas.propTypes = {
-    // Explicitly state that both 'angle'...
     angle: PropTypes.number.isRequired,
-    // ...and 'trackMouse' are required to run successfully
+    gameState: PropTypes.shape({
+        started: PropTypes.bool.isRequired,
+        kills: PropTypes.number.isRequired,
+        lives: PropTypes.number.isRequired,
+    }).isRequired,
     trackMouse: PropTypes.func.isRequired,
+    startGame: PropTypes.func.isRequired,
 };
 
 export default Canvas;
