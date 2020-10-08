@@ -1,7 +1,7 @@
 // This container will use the connect utility from react-redux...
 import { connect } from 'react-redux';
 import App from '../App';
-import { moveObjects, startGame} from '../actions/index';
+import { moveObjects, startGame, shoot } from '../actions/index';
 
 //  ...to pass the state.message to the message props...
 const mapStateToProps = state => ({
@@ -15,6 +15,9 @@ const mapDispatchToProps = dispatch => ({
     },
     startGame: () => {
         dispatch(startGame());
+    },
+    shoot: (mousePosition) => {
+        dispatch(shoot(mousePosition))
     },
 });
 

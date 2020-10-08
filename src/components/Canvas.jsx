@@ -2,49 +2,60 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Sky from './Sky';
 import Ground from './Ground';
-import CannonBase from "./CannonBase";
-import CannonPipe from "./CannonPipe";
-import CurrentScore from "./CurrenScore";
-import FlyingObject from "./FlyingObject";
-import StartGame from "./StartGame";
-import Title from "./Title";
+import CannonBase from './CannonBase';
+import CannonPipe from './CannonPipe';
+// import CurrentScore from './CurrentScore'
+import FlyingObject from './FlyingObject';
+import StartGame from './StartGame';
+import Title from './Title';
+// import Leaderboard from './Leaderboard';
+// import { signIn } from 'auth0-web';
+import CannonBall from './CannonBall';
+import Heart from './Heart';
 
 const Canvas = (props) => {
-    // Use the 1200 value so your app can properly show the new title component.
-    // This new vertical space will give enough time for your users to see and kill these flying objects.
     const gameHeight = 1200;
-    // Defines viewBox attribute of Canvas svg element.
-    const viewBox =
-            [window.innerWidth / -2, // min-x: This value defines what is the leftmost point that your users will see. You need to use -2 to make your canvas show the same amount of points to the left (negative) and to the right (positive) of the origin.
-            100 - gameHeight, // min-y: This value defines what will be the uppermost point of your canvas.
-            window.innerWidth, // width
-            gameHeight]; // height
+    const viewBox = [window.innerWidth / -2, 100 - gameHeight, window.innerWidth, gameHeight];
+
+    const lives = [];
+    for (let i = 0; i < props.gameState.lives; i++) {
+        const heartPosition = {
+            x: -180 - (i * 70),
+            y: 35
+        };
+        lives.push(<Heart key={i} position={heartPosition}/>);
+    }
+
     return (
         <svg
             id="aliens-go-home-canvas"
-            preserveAspectRatio="xMaxYMax none" // Forces uniform scaling of the canvas and its elements.
-            // Event listener added to your canvas to make your App component aware of the mouse position.
+            preserveAspectRatio="xMaxYMax none"
             onMouseMove={props.trackMouse}
             viewBox={viewBox}
+            onClick={props.shoot}
         >
             <defs>
                 <filter id="shadow">
                     <feDropShadow dx="1" dy="1" stdDeviation="2" />
                 </filter>
             </defs>
-            {/* SVG relies on the order that the elements are listed to decide which one is above the other.
-            You have to define the circle element after the Sky so web browsers know that they must show it above the blue background. */}
             <Sky />
             <Ground />
-            {/* Cannon rotation is tied to the state provided by the Redux store (through your App mappings) */}
+
+            {props.gameState.cannonBalls.map(cannonBall => (
+                <CannonBall
+                    key={cannonBall.id}
+                    position={cannonBall.position}
+                />
+            ))}
+
             <CannonPipe rotation={props.angle} />
             <CannonBase />
-            <CurrentScore score={15} />
 
-            { ! props.gameState.started &&
+            {!props.gameState.started &&
             <g>
-                <StartGame onClick={() => props.startGame()} />
-                <Title />
+                <StartGame onClick={() => props.startGame()}/>
+                <Title/>
             </g>
             }
 
@@ -54,6 +65,7 @@ const Canvas = (props) => {
                     position={flyingObject.position}
                 />
             ))}
+            {lives}
         </svg>
     );
 };
@@ -67,6 +79,24 @@ Canvas.propTypes = {
     }).isRequired,
     trackMouse: PropTypes.func.isRequired,
     startGame: PropTypes.func.isRequired,
+    // currentPlayer: PropTypes.shape({
+    //     id: PropTypes.string.isRequired,
+    //     maxScore: PropTypes.number.isRequired,
+    //     name: PropTypes.string.isRequired,
+    //     picture: PropTypes.string.isRequired,
+    // }),
+    // players: PropTypes.arrayOf(PropTypes.shape({
+    //     id: PropTypes.string.isRequired,
+    //     maxScore: PropTypes.number.isRequired,
+    //     name: PropTypes.string.isRequired,
+    //     picture: PropTypes.string.isRequired,
+    // })),
+    shoot: PropTypes.func.isRequired,
 };
+
+// Canvas.defaultProps = {
+//     currentPlayer: null,
+//     players: null,
+// };
 
 export default Canvas;

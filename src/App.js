@@ -2,17 +2,60 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { getCanvasPosition } from './utils/formulas';
 import Canvas from './components/Canvas';
+// import * as Auth0 from 'auth0-web';
+// import io from 'socket.io-client';
+
+// Auth0.configure({
+//     domain: 'digituz-corp.auth0.com',
+//     clientID: 'D41G9fJIvLrUJivCJpAkxOA74fpxn2Rg',
+//     redirectUri: 'http://localhost:3000/',
+//     responseType: 'token id_token',
+//     scope: 'openid profile manage:points',
+//     audience: 'https://aliens-go-home.digituz.com.br',
+// });
 
 class App extends Component {
-    // Defines the lifecycle method to start the uniform interval that will trigger the moveObjects action.
+    constructor(props) {
+        super(props);
+        this.shoot = this.shoot.bind(this);
+    }
+
     componentDidMount() {
         const self = this;
+
+        // Auth0.handleAuthCallback();
+
+        // Auth0.subscribe((auth) => {
+        //     if (!auth) return;
+        //
+        //     self.playerProfile = Auth0.getProfile();
+        //     self.currentPlayer = {
+        //         id: self.playerProfile.sub,
+        //         maxScore: 0,
+        //         name: self.playerProfile.name,
+        //         picture: self.playerProfile.picture,
+        //     };
+        //
+        //     this.props.loggedIn(self.currentPlayer);
+        //
+        //     self.socket = io('http://localhost:3001', {
+        //         query: `token=${Auth0.getAccessToken()}`,
+        //     });
+        //
+        //     self.socket.on('players', (players) => {
+        //         this.props.leaderboardLoaded(players);
+        //         players.forEach((player) => {
+        //             if (player.id === self.currentPlayer.id) {
+        //                 self.currentPlayer.maxScore = player.maxScore;
+        //             }
+        //         });
+        //     });
+        // });
+
         setInterval(() => {
             self.props.moveObjects(self.canvasMousePosition);
         }, 10);
 
-// This will make your app keep the dimension of your canvas equal to the dimension of the window that your users see...even if they resize their browsers.
-// It will also force the execution of the window.onresize function when the app is rendered for the first time.
         window.onresize = () => {
             const cnv = document.getElementById('aliens-go-home-canvas');
             cnv.style.width = `${window.innerWidth}px`;
@@ -20,30 +63,43 @@ class App extends Component {
         };
         window.onresize();
     }
-    // Method to update the canvasMousePosition property of the App component.
-    // This property is used by the moveObjects action.
-    // *Note: this property does not refer to the mouse position over the HTML document. It refers to a relative position inside your canvas.
+
+    // componentWillReceiveProps(nextProps) {
+    //     if (!nextProps.gameState.started && this.props.gameState.started) {
+    //         if (!this.currentPlayer) return;
+    //         if (this.currentPlayer.maxScore < this.props.gameState.kills) {
+    //             this.socket.emit('new-max-score', {
+    //                 ...this.currentPlayer,
+    //                 maxScore: this.props.gameState.kills,
+    //             });
+    //         }
+    //     }
+    // }
+
     trackMouse(event) {
         this.canvasMousePosition = getCanvasPosition(event);
     }
 
-    // This method now passes the angle property and the trackMouse method to the Canvas component.
+    shoot() {
+        this.props.shoot(this.canvasMousePosition);
+    }
+
     render() {
         return (
             <Canvas
-                // The canvas component will use angle to update the way it renders your cannon...
                 angle={this.props.angle}
+                currentPlayer={this.props.currentPlayer}
                 gameState={this.props.gameState}
+                players={this.props.players}
                 startGame={this.props.startGame}
-                // ...and the trackMouse to attach as an event listener to the svg element.
                 trackMouse={event => (this.trackMouse(event))}
+                shoot={this.shoot}
             />
         );
     }
 }
 
 App.propTypes = {
-    // Refers to the angle the cannon is aiming to.
     angle: PropTypes.number.isRequired,
     gameState: PropTypes.shape({
         started: PropTypes.bool.isRequired,
@@ -57,9 +113,28 @@ App.propTypes = {
         }).isRequired,
         id: PropTypes.number.isRequired,
     })).isRequired,
-    // Function that is going to be triggered on a uniform interval to update your cannon.
     moveObjects: PropTypes.func.isRequired,
     startGame: PropTypes.func.isRequired,
+    // currentPlayer: PropTypes.shape({
+    //     id: PropTypes.string.isRequired,
+    //     maxScore: PropTypes.number.isRequired,
+    //     name: PropTypes.string.isRequired,
+    //     picture: PropTypes.string.isRequired,
+    // }),
+    // leaderboardLoaded: PropTypes.func.isRequired,
+    // loggedIn: PropTypes.func.isRequired,
+    // players: PropTypes.arrayOf(PropTypes.shape({
+    //     id: PropTypes.string.isRequired,
+    //     maxScore: PropTypes.number.isRequired,
+    //     name: PropTypes.string.isRequired,
+    //     picture: PropTypes.string.isRequired,
+    // })),
+    shoot: PropTypes.func.isRequired,
 };
+
+// App.defaultProps = {
+//     currentPlayer: null,
+//     players: null,
+// };
 
 export default App;

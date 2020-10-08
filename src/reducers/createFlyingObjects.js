@@ -4,12 +4,10 @@ import {
 } from '../utils/constants';
 
 export default (state) => {
-    // If the game is not running, this code simply returns the current state unaltered.
-    if ( ! state.gameState.started) return state;
+    if ( ! state.gameState.started) return state; // game not running
 
     const now = (new Date()).getTime();
     const { lastObjectCreatedAt, flyingObjects } = state.gameState;
-
     const createNewObject = (
         now - (lastObjectCreatedAt).getTime() > createInterval &&
         flyingObjects.length < maxFlyingObjects
@@ -20,7 +18,6 @@ export default (state) => {
     const id = (new Date()).getTime();
     const predefinedPosition = Math.floor(Math.random() * maxFlyingObjects);
     const flyingObjectPosition = flyingObjectsStarterPositions[predefinedPosition];
-
     const newFlyingObject = {
         position: {
             x: flyingObjectPosition,
