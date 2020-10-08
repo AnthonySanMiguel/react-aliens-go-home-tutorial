@@ -18,6 +18,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.shoot = this.shoot.bind(this);
+        this.socket = null;
+        this.currentPlayer = null;
     }
 
     componentDidMount() {
@@ -64,17 +66,17 @@ class App extends Component {
         window.onresize();
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (!nextProps.gameState.started && this.props.gameState.started) {
-    //         if (!this.currentPlayer) return;
-    //         if (this.currentPlayer.maxScore < this.props.gameState.kills) {
-    //             this.socket.emit('new-max-score', {
-    //                 ...this.currentPlayer,
-    //                 maxScore: this.props.gameState.kills,
-    //             });
-    //         }
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.gameState.started && this.props.gameState.started) {
+            if (!this.currentPlayer) return;
+            if (this.currentPlayer.maxScore < this.props.gameState.kills) {
+                this.socket.emit('new-max-score', {
+                    ...this.currentPlayer,
+                    maxScore: this.props.gameState.kills,
+                });
+            }
+        }
+    }
 
     trackMouse(event) {
         this.canvasMousePosition = getCanvasPosition(event);
@@ -115,26 +117,26 @@ App.propTypes = {
     })).isRequired,
     moveObjects: PropTypes.func.isRequired,
     startGame: PropTypes.func.isRequired,
-    // currentPlayer: PropTypes.shape({
-    //     id: PropTypes.string.isRequired,
-    //     maxScore: PropTypes.number.isRequired,
-    //     name: PropTypes.string.isRequired,
-    //     picture: PropTypes.string.isRequired,
-    // }),
-    // leaderboardLoaded: PropTypes.func.isRequired,
-    // loggedIn: PropTypes.func.isRequired,
-    // players: PropTypes.arrayOf(PropTypes.shape({
-    //     id: PropTypes.string.isRequired,
-    //     maxScore: PropTypes.number.isRequired,
-    //     name: PropTypes.string.isRequired,
-    //     picture: PropTypes.string.isRequired,
-    // })),
+    currentPlayer: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        maxScore: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        picture: PropTypes.string.isRequired,
+    }),
+    leaderboardLoaded: PropTypes.func.isRequired,
+    loggedIn: PropTypes.func.isRequired,
+    players: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        maxScore: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        picture: PropTypes.string.isRequired,
+    })),
     shoot: PropTypes.func.isRequired,
 };
 
-// App.defaultProps = {
-//     currentPlayer: null,
-//     players: null,
-// };
+App.defaultProps = {
+    currentPlayer: null,
+    players: null,
+};
 
 export default App;

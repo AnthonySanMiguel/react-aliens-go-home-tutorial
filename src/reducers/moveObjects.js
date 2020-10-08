@@ -4,7 +4,7 @@ import moveBalls from './moveCannonBalls';
 import checkCollisions from './checkCollisions';
 
 function moveObjects(state, action) {
-    if ( ! state.gameState.started) return state;
+    if (!state.gameState.started) return state;
 
     let cannonBalls = moveBalls(state.gameState.cannonBalls);
 

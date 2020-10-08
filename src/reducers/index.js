@@ -1,21 +1,22 @@
-import {MOVE_OBJECTS, START_GAME, SHOOT} from "../actions";
+import {
+    LEADERBOARD_LOADED, LOGGED_IN,
+    MOVE_OBJECTS, SHOOT, START_GAME
+} from '../actions';
 import moveObjects from './moveObjects';
-import StartGame from "../components/StartGame";
+import startGame from './startGame';
 import shoot from './shoot';
 
 const initialGameState = {
-    // Indicates if the game is running or not.
     started: false,
-    // Holds how many flying objects the user has killed.
     kills: 0,
-    // Holds how many lives the user has.
     lives: 3,
     flyingObjects: [],
-    cannonBalls: [],
     lastObjectCreatedAt: new Date(),
+    currentPlayer: null,
+    players: null,
+    cannonBalls: [],
 };
 
-// Defines the initial state of your app to include a property called angle with the value 45. This is the angle that your cannon will be aiming when your app starts.
 const initialState = {
     angle: 45,
     gameState: initialGameState,
@@ -23,16 +24,25 @@ const initialState = {
 
 function reducer(state = initialState, action) {
     switch (action.type) {
+        case LEADERBOARD_LOADED:
+            return {
+                ...state,
+                players: action.players,
+            };
+        case LOGGED_IN:
+            return {
+                ...state,
+                currentPlayer: action.player,
+            };
         case MOVE_OBJECTS:
             return moveObjects(state, action);
         case START_GAME:
-            return StartGame(state, initialGameState);
+            return startGame(state, initialGameState);
         case SHOOT:
             return shoot(state, action);
         default:
             return state;
     }
 }
-
 
 export default reducer;

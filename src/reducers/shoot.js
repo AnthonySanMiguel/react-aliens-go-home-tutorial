@@ -1,7 +1,7 @@
 import { calculateAngle } from '../utils/formulas';
 
 function shoot(state, action) {
-    if ( ! state.gameState.started) return state;
+    if (!state.gameState.started) return state;
 
     const { cannonBalls } = state.gameState;
 

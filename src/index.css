@@ -7,6 +7,6 @@ body {
 }
 
 html, body {
-  overflow: hidden; /* hides and disables scrolling for web page */
-  height: 100%; /* ensures elements fit within screen space */
+  overflow: hidden;
+  height: 100%;
 }

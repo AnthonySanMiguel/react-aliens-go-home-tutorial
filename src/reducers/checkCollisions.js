@@ -2,9 +2,7 @@ import { checkCollision } from '../utils/formulas';
 import { gameHeight } from '../utils/constants';
 
 const checkCollisions = (cannonBalls, flyingDiscs) => {
-    // Defines an array called objectsDestroyed to hold everything that is destroyed.
     const objectsDestroyed = [];
-    // Iterates over the flyingDiscs array (with the forEach function) to create a rectangular representation of the flying discs.
     flyingDiscs.forEach((flyingDisc) => {
         const currentLifeTime = (new Date()).getTime() - flyingDisc.createdAt;
         const calculatedPosition = {

@@ -4,7 +4,7 @@ import Sky from './Sky';
 import Ground from './Ground';
 import CannonBase from './CannonBase';
 import CannonPipe from './CannonPipe';
-// import CurrentScore from './CurrentScore'
+import CurrentScore from './CurrentScore'
 import FlyingObject from './FlyingObject';
 import StartGame from './StartGame';
 import Title from './Title';
@@ -51,11 +51,13 @@ const Canvas = (props) => {
 
             <CannonPipe rotation={props.angle} />
             <CannonBase />
+            <CurrentScore score={props.gameState.kills} />
 
-            {!props.gameState.started &&
+            { ! props.gameState.started &&
             <g>
-                <StartGame onClick={() => props.startGame()}/>
-                <Title/>
+                <StartGame onClick={() => props.startGame()} />
+                <Title />
+                {/*<Leaderboard currentPlayer={props.currentPlayer} authenticate={signIn} leaderboard={props.players} />*/}
             </g>
             }
 
@@ -65,6 +67,7 @@ const Canvas = (props) => {
                     position={flyingObject.position}
                 />
             ))}
+
             {lives}
         </svg>
     );
@@ -79,24 +82,24 @@ Canvas.propTypes = {
     }).isRequired,
     trackMouse: PropTypes.func.isRequired,
     startGame: PropTypes.func.isRequired,
-    // currentPlayer: PropTypes.shape({
-    //     id: PropTypes.string.isRequired,
-    //     maxScore: PropTypes.number.isRequired,
-    //     name: PropTypes.string.isRequired,
-    //     picture: PropTypes.string.isRequired,
-    // }),
-    // players: PropTypes.arrayOf(PropTypes.shape({
-    //     id: PropTypes.string.isRequired,
-    //     maxScore: PropTypes.number.isRequired,
-    //     name: PropTypes.string.isRequired,
-    //     picture: PropTypes.string.isRequired,
-    // })),
+    currentPlayer: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        maxScore: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        picture: PropTypes.string.isRequired,
+    }),
+    players: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        maxScore: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        picture: PropTypes.string.isRequired,
+    })),
     shoot: PropTypes.func.isRequired,
 };
 
-// Canvas.defaultProps = {
-//     currentPlayer: null,
-//     players: null,
-// };
+Canvas.defaultProps = {
+    currentPlayer: null,
+    players: null,
+};
 
 export default Canvas;
